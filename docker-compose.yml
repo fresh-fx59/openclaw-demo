@@ -1,0 +1,27 @@
+services:
+  openclaw-gateway:
+    build:
+      context: /home/claude-developer/openclaw-docker/source
+      dockerfile: Dockerfile
+    container_name: openclaw-gateway
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env
+    # Bind to LAN so Traefik can reach the container via Docker network
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
+    volumes:
+      - ./data:/home/node/.openclaw
+      - ./workspace:/home/node/openclaw/workspace
+    networks:
+      - traefik-public
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:18789/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+networks:
+  traefik-public:
+    external: true
