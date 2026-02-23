@@ -5,7 +5,7 @@
 http:
   routers:
     openclaw:
-      rule: "Host(`openclaw.aiengineering.com`)"
+      rule: "Host(`openclaw.aiengineerhelper.com`)"
       entryPoints:
         - websecure
       service: openclaw
