@@ -1,0 +1,23 @@
+## Traefik Dynamic Configuration — OpenClaw
+## This file is deployed to ~/traefik/dynamic/openclaw.yml
+## Routes traffic to openclaw-gateway container.
+
+http:
+  routers:
+    openclaw:
+      rule: "Host(`openclaw.aiengineering.com`)"
+      entryPoints:
+        - websecure
+      service: openclaw
+      tls: {}
+
+  services:
+    openclaw:
+      loadBalancer:
+        servers:
+          - url: "http://openclaw-gateway:18789"
+
+tls:
+  certificates:
+    - certFile: /certs/cert.pem
+      keyFile: /certs/key.pem
